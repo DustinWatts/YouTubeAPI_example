@@ -4,7 +4,6 @@
 #include <ArduinoJson.h>      // Using ArduinoJson to process the API response
 
 HTTPClient https;
-WiFiClientSecure *client = new WiFiClientSecure;
 
 // Your WiFi Details
 const char *ssid = ""; // Your WiFi SSID
@@ -64,6 +63,8 @@ void setup() {
 
 void loop() {
 
+  WiFiClientSecure *client = new WiFiClientSecure;
+
   if(client) {
     client->setCACert(rootCACertificate);
    {
@@ -97,10 +98,10 @@ void loop() {
             //const char* etag = elem["etag"];
           
             JsonObject snippet = elem["snippet"];
-            const char* snippet_displayMessage = snippet["displayMessage"];
+            const char* snippet_displayMessage = snippet["displayMessage"] | "FAILED";
                   
             JsonObject authorDetails = elem["authorDetails"];
-            const char* authorDetails_displayName = authorDetails["displayName"];
+            const char* authorDetails_displayName = authorDetails["displayName"] | "FAILED";
 
             // For now it just prints the latest 20 messages to the serial
             Serial.printf("%s wrote : %s\n", authorDetails_displayName, snippet_displayMessage);
